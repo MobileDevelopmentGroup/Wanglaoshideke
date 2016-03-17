@@ -11,6 +11,9 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    aaptOptions {
+        additionalParameters "--no-version-vectors"
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -24,4 +27,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
+
+    compile 'de.hdodenhof:circleimageview:1.3.0'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    compile 'com.jakewharton:butterknife:7.0.1'
 }

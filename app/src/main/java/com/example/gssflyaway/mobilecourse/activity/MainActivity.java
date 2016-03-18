@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.fragment.MainFragment;
+import com.example.gssflyaway.mobilecourse.fragment.ReservationFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -23,7 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     @Bind(R.id.toolbar)
     public Toolbar toolbar;
@@ -31,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     public DrawerLayout mDrawerLayout;
     @Bind(R.id.fab)
     public FloatingActionButton fab;
+    @Bind(R.id.navigation)
+    public NavigationView navigationView;
+
+    private int currentSelected;  // 当前选中的导航菜单id
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupToolbar(toolbar);
         setupFloatingActionButton(fab);
+        setupDrawerLayout();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, new MainFragment());
@@ -92,5 +99,35 @@ public class MainActivity extends AppCompatActivity {
                 .defaultDisplayImageOptions(defaultOptions)
                 .build();
         ImageLoader.getInstance().init(config);
+    }
+
+    private void setupDrawerLayout(){
+        currentSelected = R.id.index;
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        item.setChecked(true);
+        int id = item.getItemId();
+        Fragment fragment = null;
+        if(id == currentSelected)
+            return true;
+        currentSelected = id;
+        switch (id){
+            case R.id.index:
+                fragment = new MainFragment();
+                break;
+            case R.id.reservation:
+                fragment = new ReservationFragment();
+                break;
+        }
+        if(fragment != null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, fragment);
+            transaction.commit();
+            mDrawerLayout.closeDrawers();
+        }
+        return false;
     }
 }

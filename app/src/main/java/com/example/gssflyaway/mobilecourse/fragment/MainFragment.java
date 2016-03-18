@@ -33,8 +33,11 @@ public class MainFragment extends Fragment implements ViewPager.OnPageChangeList
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             // 执行滑动到下一个页面
-            if(!isScrolling)
-                viewPager.setCurrentItem((viewPager.getCurrentItem() + 1) % viewPager.getChildCount());
+            if(!isScrolling) {
+                int count = viewPager.getChildCount();
+                if(count != 0)
+                    viewPager.setCurrentItem((viewPager.getCurrentItem() + 1) % viewPager.getChildCount());
+            }
                 // 在发一个handler延时
             if(isRunning)
                 handler.sendEmptyMessageDelayed(0, 2000);

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:minHeight="72dp"
-    android:background="@drawable/touch_bg"
-    android:clickable="true">
+    android:minHeight="72dp">
 
     <LinearLayout
         android:id="@+id/bottom_wrapper"
         android:layout_width="160dp"
         android:weightSum="1"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:clickable="true">
+        android:orientation="horizontal">
         <Button
             android:id="@+id/btn_delay"
             android:background="@color/orange"
@@ -20,7 +17,7 @@
             android:textStyle="bold"
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:clickable="true"/>
+            />
         <Button
             android:id="@+id/btn_cancle"
             android:background="@color/red"
@@ -28,14 +25,12 @@
             android:layout_height="match_parent"
             android:text="Cancle"
             android:textColor="@color/font_white"
-            android:textStyle="bold"
-            android:clickable="true"/>
+            android:textStyle="bold"/>
         <!--What you want to show-->
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal" android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true">
+        android:layout_height="wrap_content">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/company_icon"
             android:layout_width="40dp"

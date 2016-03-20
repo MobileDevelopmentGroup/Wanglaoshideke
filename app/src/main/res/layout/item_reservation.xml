@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:minHeight="72dp"
+    android:background="@drawable/touch_bg"
+    android:clickable="true">
+
+    <LinearLayout
+        android:id="@+id/bottom_wrapper"
+        android:layout_width="160dp"
+        android:weightSum="1"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:clickable="true">
+        <Button
+            android:id="@+id/btn_delay"
+            android:background="@color/orange"
+            android:text="Delay"
+            android:textColor="@color/font_white"
+            android:textStyle="bold"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
+        <Button
+            android:id="@+id/btn_cancle"
+            android:background="@color/red"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:text="Cancle"
+            android:textColor="@color/font_white"
+            android:textStyle="bold"
+            android:clickable="true"/>
+        <!--What you want to show-->
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/company_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/default_avatar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true">
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="3月18号 下午4:30"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:id="@+id/mark_company"
+                android:text="大钟寺 新华国际影城 ID2333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </LinearLayout>
+</com.daimajia.swipe.SwipeLayout>

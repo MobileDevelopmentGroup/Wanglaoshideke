@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_grey"
     tools:context=".activity.ReservationDetailActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -19,7 +20,111 @@
             />
     </android.support.design.widget.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/header"
+        android:background="@color/font_white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:padding="16dp">
+        <ImageView
+            android:id="@+id/company_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_bell"
+            android:layout_marginRight="16dp"/>
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/company_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/font_black"
+                android:textStyle="bold"
+                android:text="大钟寺新华国际影城"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:id="@+id/reserve_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/font_grey"
+                android:text="预留到17:55  共2个车位"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/reserve_detail"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:background="@drawable/grey_border">
 
 
+        <TextView
+            android:id="@+id/park_ids"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/font_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingLeft="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="车位号   448、332"/>
+
+
+        <ImageView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/deep_grey"
+            android:layout_below="@id/park_ids"
+            android:layout_marginBottom="7dp"/>
+
+        <TextView
+            android:id="@+id/reserve_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:textColor="@color/font_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="预留到   17：55"
+            android:layout_below="@id/divider"
+            android:layout_marginTop="7dp"/>
+
+        <Button
+            android:id="@+id/btn_delay"
+            android:layout_width="72dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/font_white"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/divider"
+            android:text="延期"
+            />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/qrcode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center"
+        android:src="@drawable/qrcode"/>
 
 </LinearLayout>

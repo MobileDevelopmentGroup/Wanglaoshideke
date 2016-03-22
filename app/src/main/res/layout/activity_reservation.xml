@@ -30,7 +30,9 @@
         <ImageView
             android:id="@+id/company_icon"
             android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_height="48dp"
+            android:src="@drawable/ic_bell"
+            android:layout_marginRight="16dp"/>
 
         <LinearLayout
             android:id="@+id/content"

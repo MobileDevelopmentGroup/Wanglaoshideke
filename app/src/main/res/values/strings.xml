@@ -7,4 +7,5 @@
     <string name="current_reservation">当前预约</string>
     <string name="old_reservation">历史预约</string>
     <string name="reservation_detail">预约详情</string>
+    <string name="reservation_cancel">取消订单</string>
 </resources>

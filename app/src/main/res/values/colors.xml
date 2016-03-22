@@ -5,7 +5,10 @@
     <color name="colorAccent">#FF4081</color>
     <color name="font_white">#ffffff</color>
     <color name="font_grey">#757575</color>
+    <color name="font_black">#000000</color>
     <color name="bg_grey">#ececec</color>
+    <color name="bg_white">#ffffff</color>
     <color name="red">#db4437</color>
     <color name="orange">#f6bf32</color>
+    <color name="deep_grey">#757575</color>
 </resources>

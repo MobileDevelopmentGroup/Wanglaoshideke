@@ -1,5 +1,9 @@
 package com.example.gssflyaway.mobilecourse.adapter;
 
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +12,7 @@ import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.example.gssflyaway.mobilecourse.R;
+import com.example.gssflyaway.mobilecourse.activity.ReservationDetailActivity;
 import com.example.gssflyaway.mobilecourse.model.Reservation;
 
 import java.util.List;
@@ -97,9 +102,28 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     class CurrentItemHolder extends RecyclerView.ViewHolder{
-
-        public CurrentItemHolder(View itemView) {
+        private TextView timeTv;
+        private TextView markCompanyTv;
+        private View surfaceView;
+        private SwipeLayout swipeLayout;
+        public CurrentItemHolder(final View itemView) {
             super(itemView);
+            swipeLayout = (SwipeLayout) itemView;
+            timeTv = (TextView) itemView.findViewById(R.id.time);
+            markCompanyTv = (TextView) itemView.findViewById(R.id.mark_company);
+            surfaceView = itemView.findViewById(R.id.surface);
+
+            timeTv.setTextColor(Color.parseColor("#000000"));
+
+            View.OnClickListener listener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(), ReservationDetailActivity.class);
+                    itemView.getContext().startActivity(intent);
+                }
+            };
+            timeTv.setOnClickListener(listener);
+            markCompanyTv.setOnClickListener(listener);
         }
     }
 

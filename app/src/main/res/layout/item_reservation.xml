@@ -30,7 +30,8 @@
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal" android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/surface">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/company_icon"
             android:layout_width="40dp"
@@ -56,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textStyle="bold"
                 android:text="3月18号 下午4:30"
                 android:layout_marginBottom="8dp"/>
             <TextView

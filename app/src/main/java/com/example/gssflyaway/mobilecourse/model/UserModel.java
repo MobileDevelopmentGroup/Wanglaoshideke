@@ -140,7 +140,7 @@ public class UserModel extends BaseModel{
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String token = sharedPreferences.getString(TOKEN, "");
         if(token.equals(""))
-            return false;
+            return true;
         else
             return true;
     }

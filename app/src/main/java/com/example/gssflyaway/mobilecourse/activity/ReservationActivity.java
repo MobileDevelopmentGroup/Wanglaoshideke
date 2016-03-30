@@ -1,5 +1,6 @@
 package com.example.gssflyaway.mobilecourse.activity;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.gssflyaway.mobilecourse.GlobalConstant;
@@ -20,6 +22,7 @@ import com.example.gssflyaway.mobilecourse.model.ReserveModel;
 import com.example.gssflyaway.mobilecourse.model.UserModel;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -65,11 +68,14 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
     private String reservePark;
     private String[] avaliableParks;
 
+    private boolean isRunning;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservation);
         ButterKnife.bind(this);
+        isRunning = true;
 
         setupToolbar();
         setupSwipeRefreshLayout();
@@ -84,6 +90,33 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.time_view)
+    public void chooseTime(){
+        final Calendar c = Calendar.getInstance();
+                // 创建一个TimePickerDialog实例，并把它显示出来
+        new TimePickerDialog(this,
+                // 绑定监听器
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view,
+                                          int hourOfDay, int minute) {
+                        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        c.set(Calendar.MINUTE, minute);
+                        Date date = c.getTime();
+                        if(date.getTime() < System.currentTimeMillis()){
+                            Snackbar.make(swipeRefreshLayout, "无效的时间", Snackbar.LENGTH_SHORT).show();
+                        }
+                        else
+                            setTime(date.getTime());
+                    }
+                }
+                // 设置初始时间
+                , c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
+                // true表示采用24小时制
+                true).show();
     }
 
     @OnClick(R.id.btn_choose)
@@ -113,20 +146,23 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
 
                         @Override
                         public void onError(Throwable e) {
-                            Snackbar.make(swipeRefreshLayout, "预约失败！", Snackbar.LENGTH_SHORT);
+                            if(!isRunning)
+                                return;
+                            Snackbar.make(swipeRefreshLayout, "预约失败！", Snackbar.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onNext(Map map) {
+                            if(!isRunning)
+                                return;
                             String status = map.get(UserModel.STATUS).toString();
                             if("0".equals(status))
-                                Snackbar.make(swipeRefreshLayout, "预约成功！", Snackbar.LENGTH_SHORT);
+                                Snackbar.make(swipeRefreshLayout, "预约成功！", Snackbar.LENGTH_SHORT).show();
                             else
-                                Snackbar.make(swipeRefreshLayout, "预约失败！", Snackbar.LENGTH_SHORT);
+                                Snackbar.make(swipeRefreshLayout, "预约失败！", Snackbar.LENGTH_SHORT).show();
                         }
                     });
         }
-
     }
 
     private void setupToolbar(){
@@ -141,6 +177,7 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        isRunning = false;
     }
 
     private void setupSwipeRefreshLayout(){
@@ -159,11 +196,15 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
 
             @Override
             public void onError(Throwable e) {
+                if(!isRunning)
+                    return;
                 Snackbar.make(swipeRefreshLayout, "刷新失败！", Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNext(Map map) {
+                if(!isRunning)
+                    return;
                 String name = map.get(ParkModel.PARK_NAME).toString();
                 String parks = map.get(ParkModel.PARKS).toString();
                 String[] parkArr = parks.split(",");
@@ -196,15 +237,15 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
     public void setTime(long time){
         this.reserveTime = time;
         Date date = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         String str = format.format(date);
         timeView.setText(str);
         long disM = time - System.currentTimeMillis();
         int disH = 0;
-        if(disM % 3600 == 0)
-            disH = (int) (disM / 3600);
+        if(disM % 3600000 == 0)
+            disH = (int) (disM / 3600000);
         else
-            disH = (int) (disM / 3600 + 1);
+            disH = (int) (disM / 3600000 + 1);
         setCost(disH * GlobalConstant.TIME_COST);
     }
 

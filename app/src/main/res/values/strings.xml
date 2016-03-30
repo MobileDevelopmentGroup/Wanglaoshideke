@@ -8,4 +8,36 @@
     <string name="old_reservation">历史预约</string>
     <string name="reservation_detail">预约详情</string>
     <string name="reservation_cancel">取消订单</string>
+
+    <string name="title_activity_login">登陆</string>
+    <string name="title_activity_register">注册</string>
+    <!-- Strings related to login -->
+    <string name="prompt_account">请输入用户名/手机号/邮箱</string>
+    <string name="prompt_password">请输入密码</string>
+    <string name="action_sign_in">登陆</string>
+    <string name="action_sign_up">注册</string>
+    <string name="action_sign_in_short">登陆</string>
+    <string name="error_invalid_account">账户名不合法</string>
+    <string name="error_invalid_password">密码不合法</string>
+    <string name="error_null_password">请输入密码</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_field_required">请输入账户名</string>
+    <string name="permission_rationale">"需要通讯录权限来补全邮箱."</string>
+    <string name="login">登陆</string>
+    <string name="forgetpsw">忘记密码？</string>
+    <!-- Strings related to register -->
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="input_account">用户名</string>
+    <string name="input_phonenumber">手机号</string>
+    <string name="input_email">邮箱</string>
+    <string name="input_psw">密码，8位以上</string>
+    <string name="input_captcha">验证码</string>
+    <string name="captcha_error">验证码错误</string>
+    <string name="account_input_null">账户名不能为空</string>
+    <string name="account_input_exist">账户名已存在</string>
+    <string name="phone_input_null">手机号不能为空</string>
+    <string name="phone_input_error">手机号格式不正确</string>
+    <string name="email_input_null">邮箱不能为空</string>
+    <string name="email_input_error">邮箱格式不正确</string>
+    <string name="psw_input_invaid">密码应该设置8位以上</string>
 </resources>

@@ -1,5 +1,9 @@
 package com.example.gssflyaway.mobilecourse.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -32,12 +36,13 @@ public class UserModel extends BaseModel{
     public static final String AVATAR = "avatar";
     public static final String PASSWORD = "passwd";
 
+    private static final String TOKEN = "TOKEN";
+
     private static UserModel model = new UserModel();
     public static UserModel getInstance(){
         return model;
     }
 
-    private OkHttpClient client = new OkHttpClient();
     private Gson gson = new Gson();
 
     // passwd 明文密码
@@ -116,6 +121,35 @@ public class UserModel extends BaseModel{
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public String getToken(Context context){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String token = sharedPreferences.getString(TOKEN, "");
+        return token;
+    }
+
+    public void saveToken(Context context, String token){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(TOKEN, token);
+        editor.commit();
+    }
+
+    public boolean isLogin(Context context){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String token = sharedPreferences.getString(TOKEN, "");
+        if(token.equals(""))
+            return true;
+        else
+            return true;
+    }
+
+    public void clearToken(Context context){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(TOKEN, "");
+        editor.commit();
     }
 
 

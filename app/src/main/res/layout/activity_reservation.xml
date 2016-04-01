@@ -1,275 +1,294 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="@color/bg_grey"
-    tools:context=".activity.ReservationActivity">
+    android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            />
-    </android.support.design.widget.AppBarLayout>
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <LinearLayout
-        android:id="@+id/header"
-        android:background="@color/font_white"
-        android:orientation="horizontal"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                />
+        </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
-        <ImageView
-            android:id="@+id/company_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_bell"
-            android:layout_marginRight="16dp"/>
-
+        android:id="@+id/swipe_refresh_layout"
+        android:fitsSystemWindows="true">
         <LinearLayout
-            android:id="@+id/content"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/company_name"
-                android:layout_width="wrap_content"
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/header"
+                android:background="@color/font_white"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
-                android:textColor="@color/font_black"
-                android:textStyle="bold"
-                android:text="大钟寺新华国际影城"
-                android:layout_marginBottom="8dp"/>
-            <TextView
-                android:id="@+id/left_num"
-                android:layout_width="wrap_content"
+                android:padding="16dp">
+                <ImageView
+                    android:id="@+id/company_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_bell"
+                    android:layout_marginRight="16dp"/>
+
+                <LinearLayout
+                    android:id="@+id/content"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/company_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/font_black"
+                        android:textStyle="bold"
+                        android:text="大钟寺新华国际影城"
+                        android:layout_marginBottom="8dp"/>
+                    <TextView
+                        android:id="@+id/left_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/font_grey"
+                        android:text="剩余车位数：15"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/reserve_count"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
-                android:textColor="@color/font_grey"
-                android:text="剩余车位数：15"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="8dp"
+                android:background="@drawable/grey_border">
+
+                <ImageView
+                    android:id="@+id/park_img"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/ic_park"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="车位数"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toRightOf="@id/park_img"
+                    android:layout_centerVertical="true"/>
+
+                <ImageView
+                    android:id="@+id/arrow_right1"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/ic_right_arrow"
+                    android:layout_alignParentRight="true"/>
+
+
+                <TextView
+                    android:id="@+id/count_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="1"
+                    android:paddingTop="2dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_toLeftOf="@id/arrow_right1"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/reserve_time"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="8dp"
+                android:background="@drawable/grey_border">
+
+                <ImageView
+                    android:id="@+id/clock_img"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/ic_clock"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="预留到"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toRightOf="@id/clock_img"
+                    android:layout_centerVertical="true"/>
+
+                <ImageView
+                    android:id="@+id/arrow_right2"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/ic_right_arrow"
+                    android:layout_alignParentRight="true"/>
+
+
+                <TextView
+                    android:id="@+id/time_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="17:55"
+                    android:paddingTop="2dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_toLeftOf="@id/arrow_right2"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/reserve_detail"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="8dp"
+                android:background="@drawable/orange_border">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="默认区域"/>
+
+
+                <TextView
+                    android:id="@+id/time_cost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="3元/时"
+                    android:layout_marginRight="8dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="8dp"/>
+
+                <ImageView
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/deep_grey"
+                    android:layout_below="@id/time_cost"
+                    android:layout_marginBottom="7dp"/>
+
+                <TextView
+                    android:id="@+id/pipei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="已匹配：048"
+                    android:layout_below="@id/divider"
+                    android:layout_marginTop="7dp"/>
+
+                <Button
+                    android:id="@+id/btn_choose"
+                    android:layout_width="72dp"
+                    android:layout_height="30dp"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/font_white"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/divider"
+                    android:text="自选"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/footer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="86dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/bg_white"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="8dp">
+
+                    <Button
+                        android:id="@+id/confirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/font_white"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:text="确定"
+                        android:layout_alignParentBottom="true"/>
+                    <TextView
+                        android:id="@+id/fee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/confirm"
+                        android:text="预计费用：2元"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"
+                        />
+
+
+                </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
-    </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/reserve_count"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:paddingBottom="14dp"
-        android:paddingTop="14dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="8dp"
-        android:background="@drawable/grey_border">
-
-        <ImageView
-            android:id="@+id/park_img"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:src="@drawable/ic_park"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/font_black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="车位数"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@id/park_img"
-            android:layout_centerVertical="true"/>
-
-        <ImageView
-            android:id="@+id/arrow_right1"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:src="@drawable/ic_right_arrow"
-            android:layout_alignParentRight="true"/>
-
-
-        <TextView
-            android:id="@+id/count_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/font_black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="1"
-            android:paddingTop="2dp"
-            android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@id/arrow_right1"/>
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/reserve_time"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:paddingBottom="14dp"
-        android:paddingTop="14dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="8dp"
-        android:background="@drawable/grey_border">
-
-        <ImageView
-            android:id="@+id/clock_img"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:src="@drawable/ic_clock"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/font_black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="预留到"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@id/clock_img"
-            android:layout_centerVertical="true"/>
-
-        <ImageView
-            android:id="@+id/arrow_right2"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:src="@drawable/ic_right_arrow"
-            android:layout_alignParentRight="true"/>
-
-
-        <TextView
-            android:id="@+id/time_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/font_black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="17:55"
-            android:paddingTop="2dp"
-            android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@id/arrow_right2"/>
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/reserve_detail"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:paddingBottom="14dp"
-        android:paddingTop="14dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="8dp"
-        android:background="@drawable/orange_border">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/font_black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="默认区域"/>
-
-
-        <TextView
-            android:id="@+id/time_cost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/font_black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="3元/时"
-            android:layout_marginRight="8dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="8dp"/>
-
-        <ImageView
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/deep_grey"
-            android:layout_below="@id/time_cost"
-            android:layout_marginBottom="7dp"/>
-
-        <TextView
-            android:id="@+id/pipei"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/font_black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="已匹配：048"
-            android:layout_below="@id/divider"
-            android:layout_marginTop="7dp"/>
-
-        <Button
-            android:layout_width="72dp"
-            android:layout_height="30dp"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/font_white"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/divider"
-            android:text="自选"
-            />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="86dp"
-            android:layout_gravity="bottom"
-            android:background="@color/bg_white"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="8dp">
-
-            <Button
-                android:id="@+id/confirm"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/font_white"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:text="确定"
-                android:layout_alignParentBottom="true"/>
-            <TextView
-                android:id="@+id/fee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/confirm"
-                android:text="预计费用：2元"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp"
-                />
-
-
-        </RelativeLayout>
-    </LinearLayout>
-
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

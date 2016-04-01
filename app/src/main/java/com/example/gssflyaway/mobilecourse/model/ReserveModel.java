@@ -35,7 +35,6 @@ public class ReserveModel extends BaseModel {
         return model;
     }
 
-    private OkHttpClient client = new OkHttpClient();
     private Gson gson = new Gson();
 
     private Map getCurrentReserve(String token) throws IOException {

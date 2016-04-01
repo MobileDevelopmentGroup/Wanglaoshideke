@@ -27,15 +27,23 @@ public class ParkModel extends BaseModel {
 
     private final String PARK_INFO_URL = HOST + "/m/parkinfo";
 
-    private OkHttpClient client = new OkHttpClient();
     private Gson gson = new Gson();
 
     private Map getParkInfo() throws IOException {
-        String response = doGet(PARK_INFO_URL, new HashMap());
-        return gson.fromJson(response, HashMap.class);
+//        String response = doGet(PARK_INFO_URL, new HashMap());
+//        return gson.fromJson(response, HashMap.class);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Map map = new HashMap();
+        map.put("name", "新华国际影城");
+        map.put("parks", "01,02,03,04,05,06,07,08");
+        return map;
     }
 
-    private Observable<Map> obGetParkInfo(){
+    public Observable<Map> obGetParkInfo(){
         return Observable.just("")
                 .map(new Func1<String, Map>() {
                     @Override

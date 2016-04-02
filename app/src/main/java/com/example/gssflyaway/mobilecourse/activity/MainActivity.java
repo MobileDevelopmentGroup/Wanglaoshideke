@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public NavigationView navigationView;
 
     private int currentSelected;  // 当前选中的导航菜单id
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
 
         init();
+
+        //点击登录
+        View headerView = navigationView.getHeaderView(0);
+        CircleImageView  LoginIma=(CircleImageView)headerView.findViewById(R.id.profile_image);
+        if(LoginIma==null) {
+            Log.e("err", "login is null");
+        }
+        else {
+            LoginIma.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent t = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(t);
+                }
+            });
+        }
     }
 
     @Override

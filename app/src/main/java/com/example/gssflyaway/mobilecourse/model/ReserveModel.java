@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -37,18 +39,18 @@ public class ReserveModel extends BaseModel {
 
     private Gson gson = new Gson();
 
-    private Map getCurrentReserve(String token) throws IOException {
+    private List<Map> getCurrentReserve(String token) throws IOException {
         Map param = new HashMap();
         param.put("token", token);
         String response = doGet(CURRENT_RESERVE_URL, param);
-        return gson.fromJson(response, HashMap.class);
+        return gson.fromJson(response, ArrayList.class);
     }
 
-    private Map getOldReserve(String token) throws IOException {
+    private List<Map> getOldReserve(String token) throws IOException {
         Map param = new HashMap();
         param.put("token", token);
         String response = doGet(OLD_RESERVE_URL, param);
-        return gson.fromJson(response, HashMap.class);
+        return gson.fromJson(response, ArrayList.class);
     }
 
     private Map newReserve(Long time, String park, String token, Integer fee) throws IOException {
@@ -78,11 +80,11 @@ public class ReserveModel extends BaseModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<Map> obGetCurrentReserve(String token){
+    public Observable<List<Map>> obGetCurrentReserve(String token){
         return Observable.just(token)
-                .map(new Func1<String, Map>() {
+                .map(new Func1<String, List<Map>>() {
                     @Override
-                    public Map call(String s) {
+                    public List<Map> call(String s) {
                         try{
                             return getCurrentReserve(s);
                         }catch (Exception e){
@@ -94,11 +96,11 @@ public class ReserveModel extends BaseModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<Map> obGetOldReserve(String token){
+    public Observable<List<Map>> obGetOldReserve(String token){
         return Observable.just(token)
-                .map(new Func1<String, Map>() {
+                .map(new Func1<String, List<Map>>() {
                     @Override
-                    public Map call(String s) {
+                    public List<Map> call(String s) {
                         try{
                             return getOldReserve(s);
                         }catch (Exception e){

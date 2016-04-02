@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,17 +14,33 @@ import android.view.ViewGroup;
 
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.adapter.ReservationRecyclerAdapter;
+import com.example.gssflyaway.mobilecourse.model.Reservation;
+import com.example.gssflyaway.mobilecourse.model.ReserveModel;
+import com.example.gssflyaway.mobilecourse.model.UserModel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 
 /**
  * Created by ruluo1992 on 3/18/2016.
  */
-public class ReservationFragment extends Fragment {
+public class ReservationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     @Bind(R.id.current_list)
     public RecyclerView currentList;
+
+    @Bind(R.id.swipe_refresh_layout)
+    public SwipeRefreshLayout swipeRefreshLayout;
+
+    private ReservationRecyclerAdapter adapter;
+
+    private volatile boolean isCurrentDone;
+    private volatile boolean isOldDone;
 
     @Nullable
     @Override
@@ -31,20 +48,96 @@ public class ReservationFragment extends Fragment {
         View mView = inflater.inflate(R.layout.fragment_reservation, container, false);
         ButterKnife.bind(this, mView);
 
+        setupSwipeRefreshLayout();
         setupRecyclerList();
+        onRefresh();
         return mView;
+    }
+
+    private void setupSwipeRefreshLayout(){
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     private void setupRecyclerList(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         currentList.setLayoutManager(linearLayoutManager);
-        ReservationRecyclerAdapter adapter = new ReservationRecyclerAdapter(null, null);
+        adapter = new ReservationRecyclerAdapter(new ArrayList<Reservation>(), new ArrayList<Reservation>());
         currentList.setAdapter(adapter);
         DividerLine dividerLine = new DividerLine(DividerLine.VERTICAL);
         dividerLine.setSize(1);
         dividerLine.setColor(0xFFDDDDDD);
         currentList.addItemDecoration(dividerLine);
     }
+
+    @Override
+    public void onRefresh() {
+        startRefresh();
+        final List<Reservation> current = new ArrayList<>();
+        final List<Reservation> old = new ArrayList<>();
+        isCurrentDone = false;
+        isOldDone = false;
+        ReserveModel.getInstance().obGetCurrentReserve(UserModel.getInstance().getToken(getContext()))
+                .subscribe(new Subscriber<List<Map>>() {
+                    @Override
+                    public void onCompleted() {
+                        adapter.setCurrentData(current);
+                        isCurrentDone = true;
+                        if(isOldDone)
+                            stopRefresh();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Map> maps) {
+                        for(Map map : maps){
+                            current.add(Reservation.fromMap(map));
+                        }
+                    }
+                });
+        ReserveModel.getInstance().obGetOldReserve(UserModel.getInstance().getToken(getContext()))
+                .subscribe(new Subscriber<List<Map>>() {
+                    @Override
+                    public void onCompleted() {
+                        adapter.setOldData(old);
+                        isOldDone = true;
+                        if(isCurrentDone)
+                            stopRefresh();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Map> maps) {
+                        for(Map map : maps){
+                            old.add(Reservation.fromMap(map));
+                        }
+                    }
+                });
+    }
+
+    private void startRefresh() {
+        if(!swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+            });
+        }
+    }
+
+    private void stopRefresh(){
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
     class DividerLine extends RecyclerView.ItemDecoration {
         /**
          * 水平方向

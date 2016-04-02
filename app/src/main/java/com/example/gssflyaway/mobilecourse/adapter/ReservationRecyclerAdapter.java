@@ -15,6 +15,8 @@ import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.activity.ReservationDetailActivity;
 import com.example.gssflyaway.mobilecourse.model.Reservation;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,8 +37,8 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public ReservationRecyclerAdapter(List<Reservation> currentData, List<Reservation> oldData) {
         this.currentData = currentData;
         this.oldData = oldData;
-        currentLen = 3;
-        oldLen = 10;
+        currentLen = currentData.size();
+        oldLen = oldData.size();
     }
 
     @Override
@@ -77,11 +79,24 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 headerHolder.textView.setText("历史预约");
         }
         else if(holder instanceof CurrentItemHolder){
-
+            CurrentItemHolder currentItemHolder = (CurrentItemHolder) holder;
+            Reservation reservation = currentData.get(position - 1);
+            currentItemHolder.markCompanyTv.setText(reservation.company + " " + reservation.mark);
+            currentItemHolder.timeTv.setText(formateTime(reservation.time));
         }
         else if(holder instanceof OldItemHolder){
-
+            OldItemHolder oldItemHolder = (OldItemHolder) holder;
+            Reservation reservation = oldData.get(position - currentLen - 2);
+            oldItemHolder.markCompanyTv.setText(reservation.company + " " + reservation.mark);
+            oldItemHolder.timeTv.setText(formateTime(reservation.time));
         }
+    }
+
+    private String formateTime(long time){
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat("MM月dd日 a HH:mm");
+        String str = format.format(date);
+        return str;
     }
 
     @Override
@@ -93,6 +108,18 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         return currentLen + oldLen + 2;
     }
 
+    public void setCurrentData(List<Reservation> data){
+        this.currentData = data;
+        this.currentLen = currentData.size();
+        notifyDataSetChanged();
+    }
+
+    public void setOldData(List<Reservation> data){
+        this.oldData = data;
+        this.oldLen = data.size();
+        notifyDataSetChanged();
+    }
+
     class HeaderHolder extends RecyclerView.ViewHolder{
         public TextView textView;
         public HeaderHolder(View itemView) {
@@ -102,10 +129,10 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     class CurrentItemHolder extends RecyclerView.ViewHolder{
-        private TextView timeTv;
-        private TextView markCompanyTv;
-        private View surfaceView;
-        private SwipeLayout swipeLayout;
+        public TextView timeTv;
+        public TextView markCompanyTv;
+        public View surfaceView;
+        public SwipeLayout swipeLayout;
         public CurrentItemHolder(final View itemView) {
             super(itemView);
             swipeLayout = (SwipeLayout) itemView;
@@ -128,9 +155,12 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     class OldItemHolder extends RecyclerView.ViewHolder{
-
+        public TextView timeTv;
+        public TextView markCompanyTv;
         public OldItemHolder(View itemView) {
             super(itemView);
+            timeTv = (TextView) itemView.findViewById(R.id.time);
+            markCompanyTv = (TextView) itemView.findViewById(R.id.mark_company);
         }
     }
 

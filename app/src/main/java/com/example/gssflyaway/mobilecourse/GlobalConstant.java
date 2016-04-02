@@ -5,4 +5,6 @@ package com.example.gssflyaway.mobilecourse;
  */
 public class GlobalConstant {
     public static final int TIME_COST = 3;  // 3元/时
+
+    public static String PARK_NAME = "";
 }

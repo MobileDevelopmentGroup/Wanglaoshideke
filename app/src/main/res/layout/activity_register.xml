@@ -141,7 +141,8 @@
                 android:layout_marginTop="30dp"
                 android:text="@string/action_sign_up"
                 android:textStyle="bold"
-                android:background="#29ddb0"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/font_white"
                 android:layout_gravity="center"/>
 
         </LinearLayout>

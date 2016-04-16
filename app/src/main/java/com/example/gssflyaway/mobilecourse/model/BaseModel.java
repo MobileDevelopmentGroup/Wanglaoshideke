@@ -19,7 +19,7 @@ import rx.Observable;
  */
 public class BaseModel {
     protected OkHttpClient client = new OkHttpClient();
-    protected final String HOST = "http://127.0.0.1";
+    protected final String HOST = "http://10.62.52.135:8080";
 
     protected String getUrlParamsByMap(Map map,
                                            boolean isSort) {

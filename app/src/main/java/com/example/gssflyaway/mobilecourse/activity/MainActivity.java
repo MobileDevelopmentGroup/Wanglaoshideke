@@ -16,17 +16,24 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.amap.api.navi.AMapNavi;
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.fragment.MainFragment;
 import com.example.gssflyaway.mobilecourse.fragment.ReservationFragment;
+import com.example.gssflyaway.mobilecourse.model.ParkModel;
+import com.example.gssflyaway.mobilecourse.model.UserModel;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import java.util.Map;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import rx.Subscriber;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -38,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public FloatingActionButton fab;
     @Bind(R.id.navigation)
     public NavigationView navigationView;
+
+    public CircleImageView mAvatar;
+    public TextView mUsername;
 
     private int currentSelected;  // 当前选中的导航菜单id
 
@@ -71,8 +81,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onClick(View v) {
                     Intent t = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(t);
+                    AMapNavi.getInstance(getApplicationContext()).startNavi(AMapNavi.GPSNaviMode);
+//                    Intent t = new Intent(getApplicationContext(), AMapActivity.class);
+//                    startActivity(t);
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(UserModel.getInstance().isLogin(getApplicationContext())){
+            String token = UserModel.getInstance().getToken(getApplicationContext());
+            UserModel.getInstance().obGetUserInfo(token)
+                    .subscribe(new Subscriber<Map>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(Map map) {
+                            String avatar = map.get(UserModel.AVATAR).toString();
+                            String userName = map.get(UserModel.USERNAME).toString();
+                            ImageLoader.getInstance().displayImage(avatar, mAvatar);
+                            mUsername.setText(userName);
+                        }
+                    });
         }
     }
 
@@ -127,11 +168,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setupDrawerLayout(){
         currentSelected = R.id.index;
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        mAvatar = (CircleImageView) headerView.findViewById(R.id.profile_image);
+        mUsername = (TextView) headerView.findViewById(R.id.username);
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        item.setChecked(true);
         int id = item.getItemId();
         Fragment fragment = null;
         if(id == currentSelected)
@@ -139,11 +182,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         currentSelected = id;
         switch (id){
             case R.id.index:
+                item.setChecked(true);
                 fragment = new MainFragment();
                 break;
             case R.id.reservation:
+                item.setChecked(true);
                 fragment = new ReservationFragment();
                 break;
+            case R.id.navi:
+                Intent t = new Intent(getApplicationContext(), AMapActivity.class);
+                startActivity(t);
+                return false;
         }
         if(fragment != null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

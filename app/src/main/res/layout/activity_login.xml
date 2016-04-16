@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.example.cczhu.myapplication.LoginActivity"
     android:theme="@style/Base.ThemeOverlay.AppCompat">
 
     <android.support.design.widget.AppBarLayout
@@ -115,7 +114,7 @@
                         android:layout_marginStart="40dp"
                         android:layout_marginLeft="40dp"
                         android:layout_weight="0.2"
-                        android:background="#8891de"
+                        android:background="@color/colorPrimary"
                         android:textColor="#ffffff"
                         android:textSize="24sp" />
                     <Button
@@ -129,7 +128,7 @@
                         android:layout_marginStart="60dp"
                         android:layout_marginLeft="60dp"
                         android:layout_weight="0.2"
-                        android:background="#7fe389"
+                        android:background="@color/orange"
                         android:textColor="#ffffff"
                         android:textSize="24sp" />
                 </LinearLayout>

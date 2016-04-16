@@ -1,5 +1,6 @@
 package com.example.gssflyaway.mobilecourse.model;
 
+import com.example.gssflyaway.mobilecourse.GlobalConstant;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -30,16 +31,19 @@ public class ParkModel extends BaseModel {
     private Gson gson = new Gson();
 
     private Map getParkInfo() throws IOException {
-//        String response = doGet(PARK_INFO_URL, new HashMap());
-//        return gson.fromJson(response, HashMap.class);
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        if (!GlobalConstant.IS_DEBUG) {
+            String response = doGet(PARK_INFO_URL, new HashMap());
+            System.out.println("!!!!!!!!!!!!!!!! get park response:" + response);
+            return gson.fromJson(response, HashMap.class);
+        }
         Map map = new HashMap();
         map.put("name", "新华国际影城");
-        map.put("parks", "01,02,03,04,05,06,07,08");
+        map.put("parks", "01,02,03,04,05,06,07,08,01,02,03,04,05,06,07,08,01,02,03,04,05,06,07,08,01,02,03,04,05,06,07,08,01,02,03,04,05,06,07,08");
         return map;
     }
 

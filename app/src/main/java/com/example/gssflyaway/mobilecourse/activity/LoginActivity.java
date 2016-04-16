@@ -31,9 +31,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.gssflyaway.mobilecourse.R;
+import com.example.gssflyaway.mobilecourse.model.UserModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -346,20 +349,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                Map response = UserModel.getInstance().login(mEmail, mPassword);
+                String status = response.get(UserModel.STATUS).toString();
+                String msg = response.get(UserModel.MESSAGE).toString();
+                if(status.equals("0")){
+                    UserModel.getInstance().saveToken(getApplicationContext(), msg);
+                    return true;
+                }
+                else
+                    return false;
+            } catch (IOException e) {
+                e.printStackTrace();
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-            return false;
+//            try {
+//                // Simulate network access.
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                return false;
+//            }
+//
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
+//            return false;
         }
 
         @Override

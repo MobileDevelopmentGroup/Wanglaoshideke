@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.example.gssflyaway.mobilecourse.GlobalConstant;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
@@ -25,7 +27,7 @@ import rx.schedulers.Schedulers;
 public class UserModel extends BaseModel{
     private final String LOGIN_URL = HOST + "/m/login";
     private final String REGISTER_URL = HOST + "/m/register";
-    private final String USERINFO_URL = HOST + "/m/userinfo";
+    private final String USERINFO_URL = HOST + "/m/personInfo/userInfo";
 
     public static final String STATUS = "status";
     public static final String MESSAGE = "msg";
@@ -46,14 +48,26 @@ public class UserModel extends BaseModel{
     private Gson gson = new Gson();
 
     // passwd 明文密码
-    private Map login(String username, String passwd) throws IOException {
-        String md5pwd = DigestUtils.md5Hex(passwd);
+    public Map login(String username, String passwd) throws IOException {
+        String md5pwd = "";
+        try {
+            md5pwd = new String(Hex.encodeHex(DigestUtils.md5(passwd)));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         Map param = new HashMap();
         param.put(USERNAME, username);
         param.put(PASSWORD, md5pwd);
 
-        String response = doPost(LOGIN_URL, param);
-        return gson.fromJson(response, HashMap.class);
+        if (!GlobalConstant.IS_DEBUG) {
+            String response = doPost(LOGIN_URL, param);
+            System.out.println("!!!!!!!!!!!!!! login response:" + response);
+            return gson.fromJson(response, HashMap.class);
+        }
+        Map result = new HashMap();
+        result.put(STATUS, "0");
+        result.put(MESSAGE, "14594071369770000");
+        return result;
     }
 
     private Map register(String username, String passwd, String phone) throws IOException {
@@ -71,7 +85,11 @@ public class UserModel extends BaseModel{
         Map param = new HashMap();
         param.put("token", token);
         String response = doGet(USERINFO_URL, param);
-        return gson.fromJson(response, HashMap.class);
+        Map result = gson.fromJson(response, HashMap.class);
+        if (GlobalConstant.IS_DEBUG) {
+            result.put(AVATAR, "http://pic.xoyo.com/bbs/2011/05/05/1105052118830c2d625c0efe2e.jpg");
+        }
+        return result;
     }
 
 
@@ -151,6 +169,4 @@ public class UserModel extends BaseModel{
         editor.putString(TOKEN, "");
         editor.commit();
     }
-
-
 }

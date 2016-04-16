@@ -45,6 +45,9 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
     @Bind(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @Bind(R.id.container)
+    View container;
+
     @Bind(R.id.time_view)
     TextView timeView;
 
@@ -141,7 +144,7 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
                     .subscribe(new Subscriber<Map>() {
                         @Override
                         public void onCompleted() {
-
+                            stopRefresh();
                         }
 
                         @Override
@@ -155,11 +158,7 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
                         public void onNext(Map map) {
                             if(!isRunning)
                                 return;
-                            String status = map.get(UserModel.STATUS).toString();
-                            if("0".equals(status))
-                                Snackbar.make(swipeRefreshLayout, "预约成功！", Snackbar.LENGTH_SHORT).show();
-                            else
-                                Snackbar.make(swipeRefreshLayout, "预约失败！", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(swipeRefreshLayout, "预约成功！", Snackbar.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -187,6 +186,7 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
 
     @Override
     public void onRefresh() {
+        container.setVisibility(View.GONE);
         startRefresh();
         ParkModel.getInstance().obGetParkInfo().subscribe(new Subscriber<Map>() {
             @Override
@@ -205,6 +205,7 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
             public void onNext(Map map) {
                 if(!isRunning)
                     return;
+                container.setVisibility(View.VISIBLE);
                 String name = map.get(ParkModel.PARK_NAME).toString();
                 String parks = map.get(ParkModel.PARKS).toString();
                 String[] parkArr = parks.split(",");

@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,11 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.gssflyaway.mobilecourse.MyEvent;
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.adapter.ReservationRecyclerAdapter;
 import com.example.gssflyaway.mobilecourse.model.Reservation;
 import com.example.gssflyaway.mobilecourse.model.ReserveModel;
 import com.example.gssflyaway.mobilecourse.model.UserModel;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +59,21 @@ public class ReservationFragment extends Fragment implements SwipeRefreshLayout.
         return mView;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessage(MyEvent event) {
+        if(event.type == MyEvent.Type.REFRESH_RESERVATION){
+            onRefresh();
+        }
+    }
+
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopRefresh();
+    }
+
     private void setupSwipeRefreshLayout(){
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -77,6 +97,8 @@ public class ReservationFragment extends Fragment implements SwipeRefreshLayout.
         final List<Reservation> old = new ArrayList<>();
         isCurrentDone = false;
         isOldDone = false;
+        adapter.setOldData(old);
+        adapter.setCurrentData(current);
         ReserveModel.getInstance().obGetCurrentReserve(UserModel.getInstance().getToken(getContext()))
                 .subscribe(new Subscriber<List<Map>>() {
                     @Override
@@ -89,7 +111,10 @@ public class ReservationFragment extends Fragment implements SwipeRefreshLayout.
 
                     @Override
                     public void onError(Throwable e) {
-
+                        stopRefresh();
+                        System.out.println("!!!!!!!!!!!!!!!!!!!!!");
+                        e.printStackTrace();
+                        Snackbar.make(swipeRefreshLayout, "刷新失败", Snackbar.LENGTH_SHORT).show();
                     }
 
                     @Override

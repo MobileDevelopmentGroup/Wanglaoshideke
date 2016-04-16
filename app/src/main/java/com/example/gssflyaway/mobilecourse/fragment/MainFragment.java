@@ -8,16 +8,21 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.gssflyaway.mobilecourse.GlobalConstant;
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.adapter.GalleryViewPagerAdapter;
+import com.example.gssflyaway.mobilecourse.model.ParkModel;
 import com.viewpagerindicator.LinePageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 
 /**
  * Created by ruluo1992 on 3/17/2016.
@@ -44,6 +49,36 @@ public class MainFragment extends Fragment implements ViewPager.OnPageChangeList
         };
     };
 
+    @Bind(R.id.company_name)
+    TextView parkName;
+
+    @Bind(R.id.left_num)
+    TextView parkNum; // 剩余车位数：15
+
+    private void initData(){
+        ParkModel.getInstance().obGetParkInfo().subscribe(new Subscriber<Map>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Map map) {
+                String name = map.get(ParkModel.PARK_NAME).toString();
+                String parks = map.get(ParkModel.PARKS).toString();
+                GlobalConstant.PARK_NAME = name;
+                String[] p = parks.split(",");
+                parkName.setText(name);
+                parkNum.setText(String.format("剩余车位：%d", p.length));
+            }
+        });
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,6 +86,7 @@ public class MainFragment extends Fragment implements ViewPager.OnPageChangeList
         ButterKnife.bind(this, view);
 
         setupViewpager(viewPager, indicator);
+        initData();
         return view;
     }
 

@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             />
         <Button
-            android:id="@+id/btn_cancle"
+            android:id="@+id/btn_cancel"
             android:background="@color/red"
             android:layout_width="80dp"
             android:layout_height="match_parent"

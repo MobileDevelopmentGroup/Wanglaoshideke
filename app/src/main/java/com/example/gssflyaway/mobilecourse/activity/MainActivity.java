@@ -22,6 +22,7 @@ import com.amap.api.navi.AMapNavi;
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.fragment.MainFragment;
 import com.example.gssflyaway.mobilecourse.fragment.ReservationFragment;
+import com.example.gssflyaway.mobilecourse.fragment.SettingFragment;
 import com.example.gssflyaway.mobilecourse.model.ParkModel;
 import com.example.gssflyaway.mobilecourse.model.UserModel;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -193,6 +194,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent t = new Intent(getApplicationContext(), AMapActivity.class);
                 startActivity(t);
                 return false;
+            case R.id.setting:
+                item.setChecked(true);
+                fragment = new SettingFragment();
+                break;
         }
         if(fragment != null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

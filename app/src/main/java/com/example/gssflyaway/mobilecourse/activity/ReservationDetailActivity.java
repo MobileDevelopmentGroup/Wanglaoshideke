@@ -3,6 +3,7 @@ package com.example.gssflyaway.mobilecourse.activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import android.widget.TimePicker;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.gssflyaway.mobilecourse.GlobalConstant;
+import com.example.gssflyaway.mobilecourse.MyEvent;
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.model.Reservation;
 import com.example.gssflyaway.mobilecourse.model.ReserveModel;
@@ -28,6 +30,10 @@ import com.example.gssflyaway.mobilecourse.model.UserModel;
 import com.github.yoojia.zxing.qrcode.Encoder;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,6 +74,7 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
     Button btnDelay;
 
     private Reservation reservation;
+    private Boolean isRunning = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +88,9 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
         setData(reservation);
         setupButtons();
 
+        isRunning = true;
+        JudgeAvaliableTask task = new JudgeAvaliableTask(this);
+        task.execute(reservation.id);
     }
 
     private void setupButtons() {
@@ -97,7 +107,7 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
         parkIds.setText(parks);
         reserveTime.setText(String.format("预留到   %s", format.format(date)));
 
-        qrCode.setImageBitmap(generateQRCode("www.baidu.com"));
+        qrCode.setImageBitmap(generateQRCode("http://www.baidu.com"));
     }
 
     private Bitmap generateQRCode(String content) {
@@ -137,6 +147,7 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        isRunning = false;
     }
 
     private void setupToolbar(){
@@ -148,7 +159,7 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
     }
 
     public void showDelayConfirm(final int plusFee, final Long newTime, final String id){
-        new MaterialDialog.Builder(this.getApplicationContext())
+        new MaterialDialog.Builder(reserveInfo.getContext())
                 .title("提示")
                 .content("额外付费：" + plusFee + "元")
                 .positiveText("确认")
@@ -230,6 +241,48 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
                     , c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
                     // true表示采用24小时制
                     true).show();
+        }
+    }
+
+    static class JudgeAvaliableTask extends AsyncTask<String, Void, Boolean>{
+        private WeakReference<ReservationDetailActivity> activityWeakReference;
+
+        public JudgeAvaliableTask(ReservationDetailActivity activity){
+            activityWeakReference = new WeakReference<ReservationDetailActivity>(activity);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean avaliable) {
+            if (!avaliable && activityWeakReference.get() != null) {
+                MyEvent event = new MyEvent();
+                event.type = MyEvent.Type.REFRESH_RESERVATION_AND_SHOWERR;
+                EventBus.getDefault().post(event);
+                activityWeakReference.get().finish();
+            }
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            int count = 0;
+            while(activityWeakReference.get() != null &&
+                    activityWeakReference.get().isRunning == true){
+                try {
+                    Boolean avaliable = false;
+                    if(GlobalConstant.IS_DEBUG) {
+                        avaliable = count > 10 ? false : true;
+                    } else {
+                        avaliable = ReserveModel.getInstance().isAvaliable(params[0]);
+                    }
+                    if(!avaliable){
+                        return false;
+                    }
+                    Thread.sleep(500);
+                    count++;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return true;
         }
     }
 }

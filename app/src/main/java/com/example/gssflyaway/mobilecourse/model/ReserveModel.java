@@ -27,6 +27,7 @@ public class ReserveModel extends BaseModel {
     private final String NEW_RESERVE_URL = HOST + "/m/reserve";
     private final String DELAY_RESERVE_URL = HOST + "/m/current_reserve/delay";
     private final String CANCEL_RESERVE_URL = HOST + "/m/current_reserve/cancel";
+    private final String RESERVE_AVALIABLE = HOST + "/m/reserve_avaliable";
 
     public static final String TIME = "time";
     public static final String PARK = "park";
@@ -43,6 +44,16 @@ public class ReserveModel extends BaseModel {
     }
 
     private Gson gson = new Gson();
+
+    public boolean isAvaliable(String id) throws IOException {
+        Map<String, String> param = new HashMap<>();
+        param.put("id", id);
+        String response = doGet(RESERVE_AVALIABLE, param);
+        if(response.trim().equals("0"))
+            return false;
+        else
+            return true;
+    }
 
     private List<Map> getCurrentReserve(String token) throws IOException, InterruptedException {
         if(GlobalConstant.IS_DEBUG){

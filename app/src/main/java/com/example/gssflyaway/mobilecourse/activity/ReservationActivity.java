@@ -34,7 +34,7 @@ import rx.Subscriber;
 /**
  * Created by ruluo1992 on 3/21/2016.
  */
-public class ReservationActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class ReservationActivity extends AppCompatActivity{
 
     @Bind(R.id.company_name)
     TextView nameView;
@@ -83,7 +83,7 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
         setupToolbar();
         setupSwipeRefreshLayout();
 
-        onRefresh();
+        refresh();
     }
 
     @Override
@@ -181,11 +181,11 @@ public class ReservationActivity extends AppCompatActivity implements SwipeRefre
 
     private void setupSwipeRefreshLayout(){
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
-        swipeRefreshLayout.setOnRefreshListener(this);
+//        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    @Override
-    public void onRefresh() {
+//    @Override
+    public void refresh() {
         container.setVisibility(View.GONE);
         startRefresh();
         ParkModel.getInstance().obGetParkInfo().subscribe(new Subscriber<Map>() {

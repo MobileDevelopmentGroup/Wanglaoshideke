@@ -15,6 +15,10 @@
             android:id="@+id/navi"
             android:title="@string/navi"
             android:icon="@drawable/navi" />
+        <item
+            android:id="@+id/setting"
+            android:title="@string/setting"
+            android:icon="@drawable/setting"/>
 
         <!--<item xmlns:app="http://schemas.android.com/apk/res-auto"-->
             <!--android:id="@+id/notifaction"-->

@@ -5,8 +5,8 @@ package com.example.gssflyaway.mobilecourse;
  */
 public class MyEvent {
     public enum Type{
-        REFRESH_RESERVATION
+        REFRESH_RESERVATION,
+        REFRESH_RESERVATION_AND_SHOWERR
     };
     public Type type;
-
 }

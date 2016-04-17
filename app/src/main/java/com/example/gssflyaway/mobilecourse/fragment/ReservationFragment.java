@@ -20,6 +20,7 @@ import com.example.gssflyaway.mobilecourse.model.Reservation;
 import com.example.gssflyaway.mobilecourse.model.ReserveModel;
 import com.example.gssflyaway.mobilecourse.model.UserModel;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -47,11 +48,14 @@ public class ReservationFragment extends Fragment implements SwipeRefreshLayout.
     private volatile boolean isCurrentDone;
     private volatile boolean isOldDone;
 
+    private boolean needRefresh = true;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_reservation, container, false);
         ButterKnife.bind(this, mView);
+        EventBus.getDefault().register(this);
 
         setupSwipeRefreshLayout();
         setupRecyclerList();
@@ -64,6 +68,10 @@ public class ReservationFragment extends Fragment implements SwipeRefreshLayout.
         if(event.type == MyEvent.Type.REFRESH_RESERVATION){
             onRefresh();
         }
+        else if(event.type == MyEvent.Type.REFRESH_RESERVATION_AND_SHOWERR){
+            Snackbar.make(swipeRefreshLayout, "订单失效！", Snackbar.LENGTH_SHORT).show();
+            onRefresh();
+        }
     }
 
 
@@ -72,6 +80,7 @@ public class ReservationFragment extends Fragment implements SwipeRefreshLayout.
     public void onDestroy() {
         super.onDestroy();
         stopRefresh();
+        EventBus.getDefault().unregister(this);
     }
 
     private void setupSwipeRefreshLayout(){

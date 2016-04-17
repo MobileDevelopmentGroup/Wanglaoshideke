@@ -8,5 +8,5 @@ public class GlobalConstant {
 
     public static String PARK_NAME = "新华国际影城";
 
-    public static final Boolean IS_DEBUG = true;
+    public static Boolean IS_DEBUG = true;
 }

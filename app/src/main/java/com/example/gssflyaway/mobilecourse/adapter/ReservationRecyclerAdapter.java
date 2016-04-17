@@ -20,12 +20,15 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.swipe.SwipeLayout;
 import com.example.gssflyaway.mobilecourse.GlobalConstant;
+import com.example.gssflyaway.mobilecourse.MyEvent;
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.activity.ReservationDetailActivity;
 import com.example.gssflyaway.mobilecourse.model.Reservation;
 import com.example.gssflyaway.mobilecourse.model.ReservationModel;
 import com.example.gssflyaway.mobilecourse.model.ReserveModel;
 import com.example.gssflyaway.mobilecourse.model.UserModel;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -243,6 +246,9 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                                 @Override
                                 public void onNext(Map map) {
                                     Snackbar.make(swipeLayout, "延期成功！", Snackbar.LENGTH_SHORT).show();
+                                    MyEvent event = new MyEvent();
+                                    event.type = MyEvent.Type.REFRESH_RESERVATION;
+                                    EventBus.getDefault().post(event);
                                 }
                             });
                         }
@@ -274,6 +280,9 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                                         @Override
                                         public void onNext(Map map) {
                                             Snackbar.make(swipeLayout, "取消成功！", Snackbar.LENGTH_SHORT).show();
+                                            MyEvent event = new MyEvent();
+                                            event.type = MyEvent.Type.REFRESH_RESERVATION;
+                                            EventBus.getDefault().post(event);
                                         }
                                     });
                         }

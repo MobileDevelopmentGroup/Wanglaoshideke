@@ -1,7 +1,10 @@
 package com.example.gssflyaway.mobilecourse.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +32,7 @@ public class SettingFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!! enter onclick");
                 String hostIp = hostText.getText().toString().trim();
                 if(hostIp.equals("")) {
                     GlobalConstant.IS_DEBUG = true;
@@ -36,8 +40,34 @@ public class SettingFragment extends Fragment {
                     GlobalConstant.IS_DEBUG = false;
                     BaseModel.HOST = String.format("http://%s:8080", hostIp);
                 }
+                setHostIp(hostIp);
+                Snackbar.make(hostText, "设置成功！", Snackbar.LENGTH_SHORT).show();
             }
         });
+        String hostIp = getHostIp();
+        if(hostIp.equals("")) {
+            GlobalConstant.IS_DEBUG = true;
+        } else {
+            GlobalConstant.IS_DEBUG = false;
+            BaseModel.HOST = String.format("http://%s:8080", hostIp);
+        }
+        hostText.setText(hostIp);
+        System.out.println("!!!!!!!!!!!!!! HOST:" + BaseModel.HOST);
         return mView;
     }
+
+    private String getHostIp(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String hostip = sharedPreferences.getString("HOSTIP", "");
+        return hostip;
+    }
+
+    private void setHostIp(String ip){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("HOSTIP", ip);
+        editor.commit();
+    }
+
+
 }

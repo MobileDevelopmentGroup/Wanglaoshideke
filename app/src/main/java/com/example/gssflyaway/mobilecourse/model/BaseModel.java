@@ -19,7 +19,7 @@ import rx.Observable;
  */
 public class BaseModel {
     protected OkHttpClient client = new OkHttpClient();
-    public static String HOST = "http://10.62.52.135:8080";
+    public volatile static String HOST = "http://10.50.72.75:8080";
 
     protected String getUrlParamsByMap(Map map,
                                            boolean isSort) {
@@ -47,6 +47,8 @@ public class BaseModel {
     protected String doGet(String url, Map params) throws IOException {
         String paramStr = getUrlParamsByMap(params, false);
         url = url + "?" + paramStr;
+        System.out.println("!!!!!!!!!!!! get url:" + url);
+        System.out.println("ip:" + HOST);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -64,6 +66,7 @@ public class BaseModel {
                 .url(url)
                 .post(builder.build())
                 .build();
+        System.out.println("!!!!!!!!!!!!!!!!! post url:" + url);
         Response response = client.newCall(request).execute();
         return response.body().string();
     }

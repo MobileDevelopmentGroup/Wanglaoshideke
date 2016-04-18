@@ -41,5 +41,11 @@
     <string name="email_input_error">邮箱格式不正确</string>
     <string name="psw_input_invaid">密码应该设置8位以上</string>
     <string name="navi">导航</string>
+
+    <string name="photo_chosen">选择图片</string>
     <string name="setting">设置</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme.NoActionBar">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="66ec15dfd63e2db95bad96bf99308409"/>
+            android:value="66ec15dfd63e2db95bad96bf99308409" />
+
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name">
@@ -38,16 +39,20 @@
             android:label="@string/reservation" />
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/action_sign_in"
-            />
+            android:label="@string/action_sign_in" />
         <activity
             android:name=".activity.RegisterActivity"
-            android:label="@string/action_sign_up">
-        </activity>
+            android:label="@string/action_sign_up" />
         <activity
             android:name=".activity.AMapActivity"
-            android:label="@string/navi">
-        </activity>
+            android:label="@string/navi" />
+
+        <activity android:name=".activity.ButtonPopupWindowActivity"
+            android:theme="@style/MyDialogStyleBottom"  />
+
+        <activity android:name=".activity.PhoneNumberChangeActivity"></activity>
+
+
     </application>
 
 </manifest>

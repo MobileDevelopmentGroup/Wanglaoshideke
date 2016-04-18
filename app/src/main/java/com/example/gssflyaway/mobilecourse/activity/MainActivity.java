@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.amap.api.navi.AMapNavi;
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.fragment.MainFragment;
+import com.example.gssflyaway.mobilecourse.fragment.PersonInfoFragment;
 import com.example.gssflyaway.mobilecourse.fragment.ReservationFragment;
 import com.example.gssflyaway.mobilecourse.fragment.SettingFragment;
 import com.example.gssflyaway.mobilecourse.model.ParkModel;
@@ -190,6 +191,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 item.setChecked(true);
                 fragment = new ReservationFragment();
                 break;
+//            case R.id.PersonInfo:
+//                  item.setChecked(true);
+//                fragment = new PersonInfoFragment();
+//                break;
             case R.id.navi:
                 Intent t = new Intent(getApplicationContext(), AMapActivity.class);
                 startActivity(t);

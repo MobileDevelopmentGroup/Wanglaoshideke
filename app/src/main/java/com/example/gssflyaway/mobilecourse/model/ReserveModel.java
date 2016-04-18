@@ -22,12 +22,12 @@ import rx.schedulers.Schedulers;
  * Created by ruluo1992 on 3/29/2016.
  */
 public class ReserveModel extends BaseModel {
-    private final String CURRENT_RESERVE_URL = HOST + "/m/current_reserve";
-    private final String OLD_RESERVE_URL = HOST + "/m/old_reserve";
-    private final String NEW_RESERVE_URL = HOST + "/m/reserve";
-    private final String DELAY_RESERVE_URL = HOST + "/m/current_reserve/delay";
-    private final String CANCEL_RESERVE_URL = HOST + "/m/current_reserve/cancel";
-    private final String RESERVE_AVALIABLE = HOST + "/m/reserve_avaliable";
+//    private  String CURRENT_RESERVE_URL = HOST + "/m/current_reserve";
+//    private  String OLD_RESERVE_URL = HOST + "/m/old_reserve";
+//    private  String NEW_RESERVE_URL = HOST + "/m/reserve";
+//    private  String DELAY_RESERVE_URL = HOST + "/m/current_reserve/delay";
+//    private  String CANCEL_RESERVE_URL = HOST + "/m/current_reserve/cancel";
+//    private  String RESERVE_AVALIABLE = HOST + "/m/reserve_avaliable";
 
     public static final String TIME = "time";
     public static final String PARK = "park";
@@ -45,10 +45,35 @@ public class ReserveModel extends BaseModel {
 
     private Gson gson = new Gson();
 
+
+    public String getCANCEL_RESERVE_URL() {
+        return HOST + "/m/current_reserve/cancel";
+}
+
+    public String getCURRENT_RESERVE_URL() {
+        return HOST + "/m/current_reserve";
+    }
+
+    public String getDELAY_RESERVE_URL() {
+        return HOST + "/m/current_reserve/delay";
+    }
+
+    public String getNEW_RESERVE_URL() {
+        return HOST + "/m/reserve";
+    }
+
+    public String getOLD_RESERVE_URL() {
+        return HOST + "/m/old_reserve";
+    }
+
+    public String getRESERVE_AVALIABLE() {
+        return HOST + "/m/reserve_avaliable";
+    }
+
     public boolean isAvaliable(String id) throws IOException {
         Map<String, String> param = new HashMap<>();
         param.put("id", id);
-        String response = doGet(RESERVE_AVALIABLE, param);
+        String response = doGet(getRESERVE_AVALIABLE(), param);
         if(response.trim().equals("0"))
             return false;
         else
@@ -71,7 +96,7 @@ public class ReserveModel extends BaseModel {
         }
         Map param = new HashMap();
         param.put("token", token);
-        String response = doGet(CURRENT_RESERVE_URL, param);
+        String response = doGet(getCURRENT_RESERVE_URL(), param);
         System.out.println("!!!!!!!!!!!!!!!!! get current reserve:" + token + " " + response);
         return gson.fromJson(response, ArrayList.class);
     }
@@ -92,7 +117,8 @@ public class ReserveModel extends BaseModel {
         }
         Map param = new HashMap();
         param.put("token", token);
-        String response = doGet(OLD_RESERVE_URL, param);
+        String response = doGet(getOLD_RESERVE_URL(), param);
+        System.out.println("!!!!!!!!!!!!!!!!!!! get old response " + response);
         return gson.fromJson(response, ArrayList.class);
     }
 
@@ -109,7 +135,7 @@ public class ReserveModel extends BaseModel {
             return result;
         }
 
-        String response = doPost(NEW_RESERVE_URL, param);
+        String response = doPost(getNEW_RESERVE_URL(), param);
         System.out.println("!!!!!!!!!!!!!!!! new reserve response:" + response);
         return gson.fromJson(response, HashMap.class);
     }
@@ -129,7 +155,7 @@ public class ReserveModel extends BaseModel {
             return result;
         }
 
-        String response = doGet(DELAY_RESERVE_URL, param);
+        String response = doGet(getDELAY_RESERVE_URL(), param);
         System.out.println("!!!!!!!!!!!!!!!! delay reserve response:" + response);
         return gson.fromJson(response, HashMap.class);
     }
@@ -145,9 +171,14 @@ public class ReserveModel extends BaseModel {
             return result;
         }
 
-        String response = doGet(CANCEL_RESERVE_URL, param);
+        String response = doGet(getCANCEL_RESERVE_URL(), param);
         System.out.println("!!!!!!!!!!!!!!!!!!!!!! cancel response" + response);
         return gson.fromJson(response, HashMap.class);
+    }
+
+    public String getCalcelUrl(String id, String token) {
+        String url = String.format("%s?id=%s&token=&s", getCANCEL_RESERVE_URL(), id, token);
+        return url;
     }
 
     public Observable<Map> obCancelReserve(final String id, final String token){

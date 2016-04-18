@@ -107,7 +107,12 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
         parkIds.setText(parks);
         reserveTime.setText(String.format("预留到   %s", format.format(date)));
 
-        qrCode.setImageBitmap(generateQRCode("http://www.baidu.com"));
+        qrCode.setImageBitmap(generateQRCode(
+                ReserveModel.getInstance().getCalcelUrl(
+                        reservation.id,
+                        UserModel.getInstance().getToken(getApplicationContext())
+                )
+        ));
     }
 
     private Bitmap generateQRCode(String content) {

@@ -123,10 +123,10 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public int getItemCount() {
-        if(currentLen == 0)
-            return 0;
-        if(oldLen == 0)
-            return currentLen + 1;
+//        if(currentLen == 0)
+//            return 0;
+//        if(oldLen == 0)
+//            return currentLen + 1;
         return currentLen + oldLen + 2;
     }
 

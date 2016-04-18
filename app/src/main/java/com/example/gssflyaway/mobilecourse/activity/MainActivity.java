@@ -1,7 +1,9 @@
 package com.example.gssflyaway.mobilecourse.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -19,11 +21,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.amap.api.navi.AMapNavi;
+import com.example.gssflyaway.mobilecourse.GlobalConstant;
 import com.example.gssflyaway.mobilecourse.R;
 import com.example.gssflyaway.mobilecourse.fragment.MainFragment;
 import com.example.gssflyaway.mobilecourse.fragment.PersonInfoFragment;
 import com.example.gssflyaway.mobilecourse.fragment.ReservationFragment;
 import com.example.gssflyaway.mobilecourse.fragment.SettingFragment;
+import com.example.gssflyaway.mobilecourse.model.BaseModel;
 import com.example.gssflyaway.mobilecourse.model.ParkModel;
 import com.example.gssflyaway.mobilecourse.model.UserModel;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public TextView mUsername;
 
     private int currentSelected;  // 当前选中的导航菜单id
+    private Menu menu;
 
 
 
@@ -95,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         if(UserModel.getInstance().isLogin(getApplicationContext())){
+            menu.getItem(1).setEnabled(true);
+            menu.getItem(2).setEnabled(true);
             String token = UserModel.getInstance().getToken(getApplicationContext());
             UserModel.getInstance().obGetUserInfo(token)
                     .subscribe(new Subscriber<Map>() {
@@ -116,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             mUsername.setText(userName);
                         }
                     });
+        } else {
+            menu.getItem(1).setEnabled(false);
+            menu.getItem(2).setEnabled(false);
         }
     }
 
@@ -165,6 +175,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .defaultDisplayImageOptions(defaultOptions)
                 .build();
         ImageLoader.getInstance().init(config);
+
+        String hostIp = getHostIp();
+        if(hostIp.equals("")) {
+            GlobalConstant.IS_DEBUG = true;
+        } else {
+            GlobalConstant.IS_DEBUG = false;
+            BaseModel.HOST = String.format("http://%s:8080", hostIp);
+        }
+    }
+
+    private String getHostIp(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String hostip = sharedPreferences.getString("HOSTIP", "");
+        return hostip;
     }
 
     private void setupDrawerLayout(){
@@ -173,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.getHeaderView(0);
         mAvatar = (CircleImageView) headerView.findViewById(R.id.profile_image);
         mUsername = (TextView) headerView.findViewById(R.id.username);
+        menu = navigationView.getMenu();
     }
 
     @Override

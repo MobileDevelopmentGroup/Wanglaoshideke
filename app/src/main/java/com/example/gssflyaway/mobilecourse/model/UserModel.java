@@ -25,9 +25,9 @@ import rx.schedulers.Schedulers;
  * Created by ruluo1992 on 3/29/2016.
  */
 public class UserModel extends BaseModel{
-    private final String LOGIN_URL = HOST + "/m/login";
-    private final String REGISTER_URL = HOST + "/m/register";
-    private final String USERINFO_URL = HOST + "/m/personInfo/userInfo";
+//    private  String LOGIN_URL = HOST + "/general/m/login";
+//    private  String REGISTER_URL = HOST + "/general/m/register";
+//    private  String USERINFO_URL = HOST + "/m/personInfo/userInfo";
 
     public static final String STATUS = "status";
     public static final String MESSAGE = "msg";
@@ -47,6 +47,18 @@ public class UserModel extends BaseModel{
 
     private Gson gson = new Gson();
 
+    public String getLOGIN_URL() {
+        return HOST + "/general/m/login";
+    }
+
+    public String getREGISTER_URL() {
+        return HOST + "/general/m/register";
+    }
+
+    public String getUSERINFO_URL() {
+        return HOST + "/m/personInfo/userInfo";
+    }
+
     // passwd 明文密码
     public Map login(String username, String passwd) throws IOException {
         String md5pwd = "";
@@ -60,7 +72,7 @@ public class UserModel extends BaseModel{
         param.put(PASSWORD, md5pwd);
 
         if (!GlobalConstant.IS_DEBUG) {
-            String response = doPost(LOGIN_URL, param);
+            String response = doPost(getLOGIN_URL(), param);
             System.out.println("!!!!!!!!!!!!!! login response:" + response);
             return gson.fromJson(response, HashMap.class);
         }
@@ -77,18 +89,20 @@ public class UserModel extends BaseModel{
         param.put(PASSWORD, md5pwd);
         param.put(PHONE, phone);
 
-        String response = doPost(REGISTER_URL, param);
+        String response = doPost(getREGISTER_URL(), param);
+        System.out.println("!!!!!!!!!!!!!!!!! register response " + response);
         return gson.fromJson(response, HashMap.class);
     }
 
     private Map getUserInfo(String token) throws IOException {
         Map param = new HashMap();
         param.put("token", token);
-        String response = doGet(USERINFO_URL, param);
+        String response = doGet(getUSERINFO_URL(), param);
         Map result = gson.fromJson(response, HashMap.class);
         if (GlobalConstant.IS_DEBUG) {
             result.put(AVATAR, "http://pic.xoyo.com/bbs/2011/05/05/1105052118830c2d625c0efe2e.jpg");
         }
+        System.out.println("!!!!!!!!!!!!!!!!! get user info response " + response);
         return result;
     }
 
@@ -142,6 +156,9 @@ public class UserModel extends BaseModel{
     }
 
     public String getToken(Context context){
+        if (GlobalConstant.IS_DEBUG) {
+            return "14594071369770000";
+        }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String token = sharedPreferences.getString(TOKEN, "");
         return token;
@@ -155,10 +172,12 @@ public class UserModel extends BaseModel{
     }
 
     public boolean isLogin(Context context){
+        if (GlobalConstant.IS_DEBUG)
+            return true;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String token = sharedPreferences.getString(TOKEN, "");
         if(token.equals(""))
-            return true;
+            return false;
         else
             return true;
     }

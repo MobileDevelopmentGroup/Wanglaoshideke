@@ -6,6 +6,10 @@
             android:title="@string/index"
             android:checked="true"
             android:icon="@drawable/ic_home"/>
+        <!--<item-->
+            <!--android:id="@+id/PersonInfo"-->
+            <!--android:title="我的信息"-->
+            <!--android:icon="@drawable/ic_myinfo" />-->
 
         <item
             android:id="@+id/reservation"

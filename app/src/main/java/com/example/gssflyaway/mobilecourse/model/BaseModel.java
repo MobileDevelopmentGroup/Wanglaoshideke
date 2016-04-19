@@ -47,14 +47,16 @@ public class BaseModel {
     protected String doGet(String url, Map params) throws IOException {
         String paramStr = getUrlParamsByMap(params, false);
         url = url + "?" + paramStr;
-        System.out.println("!!!!!!!!!!!! get url:" + url);
         System.out.println("ip:" + HOST);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
         Call call = client.newCall(request);
         Response response = call.execute();
-        return response.body().string();
+        String responseStr = response.body().string();
+        System.out.println("!!!!!!!!!!!! get url:" + url);
+        System.out.println("!!!!!!!!!!!!!!! response:" + responseStr);
+        return responseStr;
     }
 
     protected String doPost(String url, Map params) throws IOException {
@@ -66,8 +68,11 @@ public class BaseModel {
                 .url(url)
                 .post(builder.build())
                 .build();
-        System.out.println("!!!!!!!!!!!!!!!!! post url:" + url);
         Response response = client.newCall(request).execute();
-        return response.body().string();
+        String responseStr = response.body().string();
+        System.out.println("!!!!!!!!!!!!!!!!! post url:" + url);
+        System.out.println(params);
+        System.out.println("!!!!!!!!!!!!!!! response:" + responseStr);
+        return responseStr;
     }
 }

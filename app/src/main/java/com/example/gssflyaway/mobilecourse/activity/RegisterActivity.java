@@ -17,9 +17,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.gssflyaway.mobilecourse.GlobalConstant;
 import com.example.gssflyaway.mobilecourse.login_and_register.*;
 
 import com.example.gssflyaway.mobilecourse.R;
+import com.example.gssflyaway.mobilecourse.model.UserModel;
+
+import java.io.IOException;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -183,7 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //输入检查完毕，进行注册操作
         showProgress(true);
-        mAuthTask = new UserRegisterTask(account, password);
+        mAuthTask = new UserRegisterTask(account, password, phone);
         mAuthTask.execute((Void) null);
 
     }
@@ -236,29 +241,39 @@ public class RegisterActivity extends AppCompatActivity {
 
         private final String mAccount;
         private final String mPassword;
+        private final String mPhone;
 
-        UserRegisterTask(String account, String password) {
+        UserRegisterTask(String account, String password, String phone) {
             mAccount = account;
             mPassword = password;
+            mPhone = phone;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+            if(GlobalConstant.IS_DEBUG) {
+                try {
+                    // Simulate network access.
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    return false;
+                }
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-
-                if (credential.equals(mAccount)) {
-                    // Account exists, return true if the password matches.
-                    return false;
-                }
+//            for (String credential : DUMMY_CREDENTIALS) {
+//
+//                if (credential.equals(mAccount)) {
+//                    // Account exists, return true if the password matches.
+//                    return false;
+//                }
+//            }
+            try {
+                Map response = UserModel.getInstance().register(mAccount, mPassword, mPhone);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
             }
 
             // TODO: register the new account here.

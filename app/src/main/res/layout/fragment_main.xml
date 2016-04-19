@@ -53,7 +53,7 @@
                     android:textSize="16dp"
                     android:textColor="@color/font_black"
                     android:textStyle="bold"
-                    android:text="大钟寺新华国际影城"
+                    android:text="测试停车场"
                     android:layout_marginBottom="8dp"/>
                 <TextView
                     android:id="@+id/left_num"

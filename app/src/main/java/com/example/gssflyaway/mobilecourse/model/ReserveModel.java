@@ -70,9 +70,14 @@ public class ReserveModel extends BaseModel {
         return HOST + "/m/reserve_avaliable";
     }
 
-    public boolean isAvaliable(String id) throws IOException {
+    public String getCheckinUrl(String id, String token) {
+        return String.format("%s?token=%s&id=%s", HOST + "/m/checkReserve", token, id);
+    }
+
+    public boolean isAvaliable(String id, String token) throws IOException {
         Map<String, String> param = new HashMap<>();
         param.put("id", id);
+        param.put("token", token);
         String response = doGet(getRESERVE_AVALIABLE(), param);
         if(response.trim().equals("0"))
             return false;

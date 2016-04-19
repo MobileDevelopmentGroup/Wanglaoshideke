@@ -31,16 +31,17 @@ public class ParkModel extends BaseModel {
     private Gson gson = new Gson();
 
     private Map getParkInfo() throws IOException {
-        if (!GlobalConstant.IS_DEBUG) {
-            String response = doGet(getParkInfoUrl(), new HashMap());
-            System.out.println("!!!!!!!!!!!!!!!! get park response:" + response);
-            return gson.fromJson(response, HashMap.class);
-        }
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        if (!GlobalConstant.IS_DEBUG) {
+            String response = doGet(getParkInfoUrl(), new HashMap());
+            System.out.println("!!!!!!!!!!!!!!!! get park response:" + response);
+            return gson.fromJson(response, HashMap.class);
+        }
+
         Map map = new HashMap();
         map.put("name", "新华国际影城");
         map.put("parks", "01,02,03,04,05,06,07,08,01,02,03,04,05,06,07,08,01,02,03,04,05,06,07,08,01,02,03,04,05,06,07,08,01,02,03,04,05,06,07,08");

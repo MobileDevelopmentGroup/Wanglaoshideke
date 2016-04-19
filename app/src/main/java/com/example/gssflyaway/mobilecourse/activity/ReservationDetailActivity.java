@@ -108,7 +108,7 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
         reserveTime.setText(String.format("预留到   %s", format.format(date)));
 
         qrCode.setImageBitmap(generateQRCode(
-                ReserveModel.getInstance().getCalcelUrl(
+                ReserveModel.getInstance().getCheckinUrl(
                         reservation.id,
                         UserModel.getInstance().getToken(getApplicationContext())
                 )
@@ -269,6 +269,7 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
         @Override
         protected Boolean doInBackground(String... params) {
             int count = 0;
+            String token = UserModel.getInstance().getToken(activityWeakReference.get().getApplicationContext());
             while(activityWeakReference.get() != null &&
                     activityWeakReference.get().isRunning == true){
                 try {
@@ -276,7 +277,7 @@ public class ReservationDetailActivity extends AppCompatActivity implements View
                     if(GlobalConstant.IS_DEBUG) {
                         avaliable = count > 10 ? false : true;
                     } else {
-                        avaliable = ReserveModel.getInstance().isAvaliable(params[0]);
+                        avaliable = ReserveModel.getInstance().isAvaliable(params[0], token);
                     }
                     if(!avaliable){
                         return false;

@@ -85,14 +85,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             LoginIma.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent t = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(t);
-                    AMapNavi.getInstance(getApplicationContext()).startNavi(AMapNavi.GPSNaviMode);
-//                    Intent t = new Intent(getApplicationContext(), AMapActivity.class);
-//                    startActivity(t);
+                    if (GlobalConstant.IS_DEBUG) {
+                        Intent t = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(t);
+                        return;
+                    }
+                    if (UserModel.getInstance().isLogin(getApplicationContext())){
+                        logout();
+                    } else {
+                        Intent t = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(t);
+//                    AMapNavi.getInstance(getApplicationContext()).startNavi(AMapNavi.GPSNaviMode);
+//                        Intent t = new Intent(getApplicationContext(), AMapActivity.class);
+//                        startActivity(t);
+                    }
                 }
             });
         }
+    }
+
+    private void logout(){
+        String token = UserModel.getInstance().getToken(getApplicationContext());
+        UserModel.getInstance().obLogout(token)
+                .subscribe(new Subscriber<Map>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Map map) {
+                        menu.getItem(1).setEnabled(false);
+                        menu.getItem(2).setEnabled(false);
+                        mUsername.setText(GlobalConstant.DEFAULT_USERNAME);
+                        mAvatar.setImageResource(R.drawable.default_avatar);
+                        Snackbar.make(mAvatar, "登出！", Snackbar.LENGTH_SHORT).show();
+                        UserModel.getInstance().clearToken(getApplicationContext());
+                    }
+                });
     }
 
     @Override
@@ -116,15 +151,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         @Override
                         public void onNext(Map map) {
-                            String avatar = map.get(UserModel.AVATAR).toString();
-                            String userName = map.get(UserModel.USERNAME).toString();
-                            ImageLoader.getInstance().displayImage(avatar, mAvatar);
-                            mUsername.setText(userName);
+                            if (map.containsKey("token")) {
+                                String avatar = map.get(UserModel.AVATAR).toString();
+                                String userName = map.get(UserModel.USERNAME).toString();
+                                ImageLoader.getInstance().displayImage(avatar, mAvatar);
+                                mUsername.setText(userName);
+                            } else {
+                                logout();
+                            }
                         }
                     });
         } else {
             menu.getItem(1).setEnabled(false);
             menu.getItem(2).setEnabled(false);
+            mUsername.setText(GlobalConstant.DEFAULT_USERNAME);
+            mAvatar.setImageResource(R.drawable.default_avatar);
         }
     }
 

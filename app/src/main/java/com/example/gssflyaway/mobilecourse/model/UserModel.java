@@ -47,12 +47,16 @@ public class UserModel extends BaseModel{
 
     private Gson gson = new Gson();
 
+    public String getLOGOUT_URL() {
+        return HOST + "/m/logout";
+    }
+
     public String getLOGIN_URL() {
-        return HOST + "/general/m/login";
+        return HOST + "/m/login";
     }
 
     public String getREGISTER_URL() {
-        return HOST + "/general/m/register";
+        return HOST + "/m/register";
     }
 
     public String getUSERINFO_URL() {
@@ -82,8 +86,9 @@ public class UserModel extends BaseModel{
         return result;
     }
 
-    private Map register(String username, String passwd, String phone) throws IOException {
-        String md5pwd = DigestUtils.md2Hex(passwd);
+    public Map register(String username, String passwd, String phone) throws IOException {
+//        String md5pwd = DigestUtils.md2Hex(passwd);
+        String md5pwd = new String(Hex.encodeHex(DigestUtils.md5(passwd)));
         Map param = new HashMap();
         param.put(USERNAME, username);
         param.put(PASSWORD, md5pwd);
@@ -94,16 +99,36 @@ public class UserModel extends BaseModel{
         return gson.fromJson(response, HashMap.class);
     }
 
+    private Map logout(String token) throws IOException {
+        Map param = new HashMap();
+        param.put("token", token);
+        String response = doPost(getLOGOUT_URL(), param);
+        return gson.fromJson(response, HashMap.class);
+    }
+
     private Map getUserInfo(String token) throws IOException {
         Map param = new HashMap();
         param.put("token", token);
         String response = doGet(getUSERINFO_URL(), param);
         Map result = gson.fromJson(response, HashMap.class);
-        if (GlobalConstant.IS_DEBUG) {
-            result.put(AVATAR, "http://pic.xoyo.com/bbs/2011/05/05/1105052118830c2d625c0efe2e.jpg");
-        }
+//        if (GlobalConstant.IS_DEBUG) {
+        result.put(AVATAR, "http://pic.xoyo.com/bbs/2011/05/05/1105052118830c2d625c0efe2e.jpg");
+//        }
         System.out.println("!!!!!!!!!!!!!!!!! get user info response " + response);
         return result;
+    }
+
+    public Observable<Map> obLogout(String token) {
+        return Observable.just(token).map(new Func1<String, Map>() {
+            @Override
+            public Map call(String s) {
+                try {
+                    return logout(s);
+                } catch (IOException e) {
+                    throw Exceptions.propagate(e);
+                }
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 

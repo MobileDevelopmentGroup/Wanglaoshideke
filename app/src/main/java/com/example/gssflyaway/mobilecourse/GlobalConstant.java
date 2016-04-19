@@ -9,4 +9,6 @@ public class GlobalConstant {
     public static String PARK_NAME = "新华国际影城";
 
     public static Boolean IS_DEBUG = false;
+
+    public static String DEFAULT_USERNAME = "点击头像登录";
 }

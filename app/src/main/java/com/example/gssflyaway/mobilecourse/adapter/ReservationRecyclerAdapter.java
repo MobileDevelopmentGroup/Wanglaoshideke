@@ -27,6 +27,7 @@ import com.example.gssflyaway.mobilecourse.model.Reservation;
 import com.example.gssflyaway.mobilecourse.model.ReservationModel;
 import com.example.gssflyaway.mobilecourse.model.ReserveModel;
 import com.example.gssflyaway.mobilecourse.model.UserModel;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -36,6 +37,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
@@ -105,12 +107,14 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             currentItemHolder.markCompanyTv.setText(reservation.company + " " + reservation.mark);
             currentItemHolder.timeTv.setText(formateTime(reservation.time));
             currentItemHolder.reservation = reservation;
+            ImageLoader.getInstance().displayImage("http://pic.xoyo.com/bbs/2011/05/05/1105052118830c2d625c0efe2e.jpg", currentItemHolder.companyIcon);
         }
         else if(holder instanceof OldItemHolder){
             OldItemHolder oldItemHolder = (OldItemHolder) holder;
             Reservation reservation = oldData.get(position - currentLen - 2);
             oldItemHolder.markCompanyTv.setText(reservation.company + " " + reservation.mark);
             oldItemHolder.timeTv.setText(formateTime(reservation.time));
+            ImageLoader.getInstance().displayImage("http://pic.xoyo.com/bbs/2011/05/05/1105052118830c2d625c0efe2e.jpg", oldItemHolder.companyIcon);
         }
     }
 
@@ -158,6 +162,7 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         public Button btnDelay;
         public Button btnCancel;
         public Reservation reservation;
+        public CircleImageView companyIcon;
         public CurrentItemHolder(final View itemView) {
             super(itemView);
             swipeLayout = (SwipeLayout) itemView;
@@ -166,7 +171,7 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             surfaceView = itemView.findViewById(R.id.surface);
             btnDelay = (Button) swipeLayout.findViewById(R.id.btn_delay);
             btnCancel = (Button) swipeLayout.findViewById(R.id.btn_cancel);
-
+            companyIcon = (CircleImageView) swipeLayout.findViewById(R.id.company_icon);
             timeTv.setTextColor(Color.parseColor("#000000"));
 
             View.OnClickListener listener = new View.OnClickListener() {
@@ -294,10 +299,12 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     class OldItemHolder extends RecyclerView.ViewHolder{
         public TextView timeTv;
         public TextView markCompanyTv;
+        public CircleImageView companyIcon;
         public OldItemHolder(View itemView) {
             super(itemView);
             timeTv = (TextView) itemView.findViewById(R.id.time);
             markCompanyTv = (TextView) itemView.findViewById(R.id.mark_company);
+            companyIcon = (CircleImageView) itemView.findViewById(R.id.company_icon);
         }
     }
 

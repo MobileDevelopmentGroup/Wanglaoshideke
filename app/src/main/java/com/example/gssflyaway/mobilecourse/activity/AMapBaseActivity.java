@@ -57,6 +57,8 @@ public class AMapBaseActivity extends Activity implements AMapNaviListener, AMap
         mAMapNavi.addAMapNaviListener(this);
 //        mAMapNavi.addAMapNaviListener(mTtsManager);
         mAMapNavi.setEmulatorNaviSpeed(150);
+        mAMapNavi.startNavi(AMapNavi.EmulatorNaviMode);
+//        mAMapNavi.startNavi()
     }
 
     @Override
